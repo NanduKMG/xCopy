@@ -55,5 +55,5 @@ os.system(cmd2)
 #os._exit(0)
 
 
-send_cmd="nc -lp 4000 > received_file"
-os.system(send_cmd)
+receive_cmd="nc -lp 4000"
+os.system(receive_cmd)

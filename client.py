@@ -1,6 +1,7 @@
 # Save as client.py
 # Message Sender
 import os
+import sys
 from socket import *
 
 cmd="nmap -sP 192.168.43.* | grep -o 192.* | tr -d '()' > ip.txt"
@@ -51,7 +52,7 @@ for ip in ips:
 #elif ((ip3==ip_own or ip3=="192.168.43.1") and (ip1=="192.168.43.1" or ip1==ip_own)):
 #    host=ip2
 
-print host
+#print host
 #host =""
 # set to IP address of target computer
 #port = 13000
@@ -65,7 +66,14 @@ print host
 #UDPSock.close()
 #os._exit(0)
 
+os.system("xclip -o > copy.txt")
+f3=open("copy.txt","r")
+text=(f3.readline()).rstrip('\n')
 
-receive_cmd="nc "+host+" 4000 < xclip -o"
-print receive_cmd
-os.system(receive_cmd)
+#print text
+
+send_cmd="echo "+text+" | nc "+host+" 4000"
+#print send_cmd
+os.system(send_cmd)
+
+
