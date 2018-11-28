@@ -57,7 +57,7 @@ def execute_send():
 		host.rstrip('\n')
 		break;
 
-	# print host
+	print host
 
 	#if ((ip1=="192.168.43.1" or ip1==ip_own) and (ip2==ip_own or ip2=="192.168.43.1")):
 	#    host=ip3
@@ -84,15 +84,29 @@ def execute_send():
 	f3=open("copy.txt","r")
 	text=(f3.readline()).rstrip('\n')
 
-	#print text
+	print text
 
 	send_cmd="echo "+text+" | nc "+host+" 4000"
-	#print send_cmd
+	print send_cmd 
 	os.system(send_cmd)
 	
 
+# def execute_receive():
+#     print ("Receiving")
+# 	cmd="echo $(seq 254) | xargs -P255 -I% -d" " ping -W 1 -c 1 192.168.43.% | grep -E -o "[0-1].*?:" > ip.txt"
+# 	os.system(cmd)
+# 	cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
+# 	os.system(cmd2)
+# 	receive_cmd="nc -lp 4000"
+# 	os.system(receive_cmd)
 def execute_receive():
-    print ("Receiving")
+	print "Receiving"
+	cmd="nmap -sP 192.168.43.* | grep -o 192.* | tr -d '()' > ip.txt"
+	os.system(cmd)
+	cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
+	os.system(cmd2)
+	receive_cmd="nc -lp 4000"
+	os.system(receive_cmd)
 
 def on_press(key):
     if any([key in COMBO for COMBO in COMBINATIONS]):

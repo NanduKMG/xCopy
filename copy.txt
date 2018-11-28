@@ -1,1 +1,1 @@
-joyce@joyce-Inspiron-15-5568:~/Desktop/xCopy$ python server.py 
+rstrip
