@@ -52,6 +52,7 @@ COMBINATION = [
 
 # The currently active modifiers
 current = set()
+current2 = set()
 
 def execute_send():
 	global host
@@ -81,7 +82,7 @@ def on_press(key):
             execute_send()
 
     if any([key in COMBO for COMBO in COMBINATION]):
-        current.add(key)
+        current2.add(key)
         if any(all(k in current for k in COMBO2) for COMBO2 in COMBINATION):
             execute_receive()
 
