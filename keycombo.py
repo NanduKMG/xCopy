@@ -1,9 +1,46 @@
 import os
-import sys
-from socket import *
 from pynput import keyboard
 
+# global host = ' '
+def getIP():
+	global host
+	cmd = "nmap -sP 192.168.43.* | grep -o 192.* | tr -d '()' > ip.txt"
+	os.system(cmd)
 
+	cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
+	os.system(cmd2)
+
+	f_ip=open("ip_own.txt","r")
+	ip_own=(f_ip.readline()).rstrip('\n')
+
+
+	f=open("ip.txt","r")
+
+	ip1=(f.readline()).rstrip('\n')
+	ip2=(f.readline()).rstrip('\n')
+	ip3=(f.readline()).rstrip('\n')
+
+
+	# host=''
+
+	lis=[]
+	ip_own.rstrip('\n')
+	lis.append("192.168.43.1")
+	lis.append(ip_own)
+
+	ips=[ip1,ip2,ip3]
+	# print ips
+	# print lis
+	for ip in ips:
+		if(ip not in lis):
+			host = ip
+			host.rstrip('\n')
+			break;
+
+	# print "Sending to:"+str(host)
+
+
+getIP()
 # The key combination to check
 COMBINATIONS = [
     {keyboard.Key.ctrl, keyboard.KeyCode(char='c')}
@@ -17,94 +54,23 @@ COMBINATION = [
 current = set()
 
 def execute_send():
-	print ("Sending")
-	cmd="nmap -sP 192.168.43.* | grep -o 192.* | tr -d '()' > ip.txt"
-	os.system(cmd)
-
-	cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
-	os.system(cmd2)
-
-	f_ip=open("ip_own.txt","r")
-
-	ip_own=(f_ip.readline()).rstrip('\n')
-
-	#print ip_own
-
-
-	f=open("ip.txt","r")
-
-	ip1=(f.readline()).rstrip('\n')
-	ip2=(f.readline()).rstrip('\n')
-	ip3=(f.readline()).rstrip('\n')
-
-	#print ip1
-	#print ip2
-	#print ip3
-	#print ip4
-	host=''
-
-	lis=[]
-	ip_own.rstrip('\n')
-	lis.append("192.168.43.1")
-	lis.append(ip_own)
-
-	ips=[ip1,ip2,ip3]
-	# print ips
-	# print lis
-	for ip in ips:
-	    if(ip not in lis):
-		host = ip
-		host.rstrip('\n')
-		break;
-
-	print host
-
-	#if ((ip1=="192.168.43.1" or ip1==ip_own) and (ip2==ip_own or ip2=="192.168.43.1")):
-	#    host=ip3
-	#elif ((ip2==ip_own or ip2=="192.168.43.1") and (ip3=="192.168.43.1" or ip3==ip_own)):#
-	#    host=ip1
-	#elif ((ip3==ip_own or ip3=="192.168.43.1") and (ip1=="192.168.43.1" or ip1==ip_own)):
-	#    host=ip2
-
-	#print host
-	#host =""
-	# set to IP address of target computer
-	#port = 13000
-	#addr = (host, port)
-	#UDPSock = socket(AF_INET, SOCK_DGRAM)
-	#while True:
-	#    data = raw_input("Enter message to send or type 'exit': ")
-	#    UDPSock.sendto(data, addr)
-	#    if data == "exit":
-	#        break
-	#UDPSock.close()
-	#os._exit(0)
+	global host
+	print "Sending to:"+str(host)
 
 	os.system("xclip -o > copy.txt")
 	f3=open("copy.txt","r")
 	text=(f3.readline()).rstrip('\n')
-
-	print text
-
+	# print text
 	send_cmd="echo "+text+" | nc "+host+" 4000"
-	print send_cmd 
+	# print send_cmd 
 	os.system(send_cmd)
 	
-
-# def execute_receive():
-#     print ("Receiving")
-# 	cmd="echo $(seq 254) | xargs -P255 -I% -d" " ping -W 1 -c 1 192.168.43.% | grep -E -o "[0-1].*?:" > ip.txt"
-# 	os.system(cmd)
-# 	cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
-# 	os.system(cmd2)
-# 	receive_cmd="nc -lp 4000"
-# 	os.system(receive_cmd)
 def execute_receive():
-	print "Receiving"
-	cmd="nmap -sP 192.168.43.* | grep -o 192.* | tr -d '()' > ip.txt"
-	os.system(cmd)
-	cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
-	os.system(cmd2)
+	print "Receiving "
+	# cmd="nmap -sP 192.168.43.* | grep -o 192.* | tr -d '()' > ip.txt"
+	# os.system(cmd)
+	# cmd2="ip route get 8.8.4.4 | head -1 | awk '{print $7}' > ip_own.txt"
+	# os.system(cmd2)
 	receive_cmd="nc -lp 4000"
 	os.system(receive_cmd)
 
